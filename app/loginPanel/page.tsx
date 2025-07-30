@@ -4,14 +4,14 @@ import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Key, User } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useTransition } from 'react';
 import { Label } from "@/components/ui/label"
-import { login } from '@/lib/action/login-action';
+import { login, loginCredentials } from '@/lib/action/login-action';
 
 const LoginPannel = () => {
   const searchParams = useSearchParams();
   const userType = searchParams.get('userType');
-
+  const [isPending,startTransition]=useTransition();
   const [user,setUser]=useState(userType)
   useEffect(() => {
     if (userType === 'Employee') {
@@ -58,19 +58,27 @@ const LoginPannel = () => {
           </p>
 
           <div className="flex flex-col gap-4 ">
-            <div className="flex items-center border rounded px-2">
+         
+         <form action={(formData:FormData)=>{
+              startTransition(()=>{
+                loginCredentials(formData);
+              })
+         }}>
+             <div className="flex items-center border rounded px-2">
               <User className="mr-2" />
               <input
                 type="text"
+                name="email"
                 placeholder="User ID"
                 className="outline-none bg-transparent py-2"
               />
             </div>
-            <div className="flex items-center border rounded px-2">
+             <div className="flex items-center border rounded px-2">
               <Key className="mr-2" />
            
             <input
               type="password"
+              name="password"
               placeholder="Password"
              className="outline-none bg-transparent py-2"
             />
@@ -82,8 +90,9 @@ const LoginPannel = () => {
                 <input type="checkbox" className="mr-1" />
                 Remember me
               </label>
-              <Button>LOGIN</Button>
+              <Button type='submit'>LOGIN</Button>
             </div>
+         </form>
 
          {user==="Candidate" && ( <div className="flex flex-col items-center gap-2">
             <p>or sign in with</p>

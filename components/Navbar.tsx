@@ -25,6 +25,10 @@ const Navbar = ({session}:{session:Session|null}) => {
      setOpen(false)
     router.push('/loginPanel?userType=Employer')
   }
+  const goToRegister = () => {
+     setOpen(false)
+    router.push('/registerJobSeeker')
+  }
   
   return (
    <nav className="flex justify-between items-center p-4 bg-white shadow-md">
@@ -85,7 +89,7 @@ const Navbar = ({session}:{session:Session|null}) => {
     </div>
     <div className="flex gap-2 border-l px-8 border-black">
       {!session?(  <>
-       <Button  variant={"ghost"} className='hover:text-red-500 hover:border-red-500 hover:border-1 font-semibold'>Sign Up</Button>
+       <Button onClick={goToRegister}  variant={"ghost"} className='hover:text-red-500 hover:border-red-500 hover:border-1 font-semibold'>Sign Up</Button>
      
            {/* Dialog for Login */}
           <Dialog open={open} onOpenChange={setOpen} >
